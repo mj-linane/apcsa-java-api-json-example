@@ -7,17 +7,11 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.Scanner;
 
-/* Tutorials can be found at:
- https://howtodoinjava.com/java/library/json-simple-read-write-json-examples/
- https://dzone.com/articles/how-to-parse-json-data-from-a-rest-api-using-simple
-*/
-
-
 public class ReadJSONExample {
     public static void main(String[] args) throws IOException, ParseException
     {
         // String of JSON data
-        String jsonData = "";
+        StringBuilder jsonData = new StringBuilder();
 
         // Get JSON data
         URL url = new URL("https://statsapi.web.nhl.com/api/v1/teams");
@@ -26,7 +20,7 @@ public class ReadJSONExample {
         Scanner sc = new Scanner(url.openStream());
         while (sc.hasNext())
         {
-            jsonData += sc.nextLine();
+            jsonData.append(sc.nextLine());
         }
         sc.close();
 
@@ -34,7 +28,7 @@ public class ReadJSONExample {
         JSONParser jsonParser = new JSONParser();
 
         // Convert JSON String to Java JSON object
-        JSONObject jsonDataObject = (JSONObject) jsonParser.parse(jsonData);
+        JSONObject jsonDataObject = (JSONObject) jsonParser.parse(jsonData.toString());
 
         // Go into the JSON object one level to get  the teams array. Cast it to a JSONArray.
         JSONArray teamsList = (JSONArray) jsonDataObject.get("teams");
@@ -49,7 +43,7 @@ public class ReadJSONExample {
     private static void parseTeamObject(JSONObject team)
     {
         // Each team is now a JSONObject and properties can now be accessed using .get
-        
+
         // Get team object within teamList
         String teamName = (String) team.get("teamName");
         System.out.println(teamName);
